@@ -72,6 +72,10 @@ public class MainClass {
     public static final int SHOW_EXPENSES = 2;
     public static final int SHOW_STATION_INFO = 3;
     public static final int EXIT = 4;
+    public static final int PRINT_DELAY = 500; // задержка вывода в консоль при генерации дня
+    private static final int RED = 0;
+    private static final int BLUE = 1;
+    private static final int GREEN = 2;
     public static int time = STARTING_TIME;
     public static String currentStation = STARTING_STATION;
     public static int counter = 0;
@@ -107,9 +111,9 @@ public class MainClass {
 
     private static void showStationInfo() {
         ArrayList<String> allStations = new ArrayList<String>();
-        allStations.addAll(Arrays.asList(METROPOLITAN[0]));
-        allStations.addAll(Arrays.asList(METROPOLITAN[1]));
-        allStations.addAll(Arrays.asList(METROPOLITAN[2]));
+        allStations.addAll(Arrays.asList(METROPOLITAN[RED]));
+        allStations.addAll(Arrays.asList(METROPOLITAN[BLUE]));
+        allStations.addAll(Arrays.asList(METROPOLITAN[GREEN]));
         System.out.println("Введите название станции");
         String input = sc.next();
         if (allStations.contains(input) && ridesInfo.containsKey(input)){
@@ -152,37 +156,37 @@ public class MainClass {
     private static void generateRides() {
         while (time < STARTING_TIME + WORKING_DAY_DURATION){
             if (counter == 0){
-                currentTime = time/60 + ":" + (((time - (time/60)*60) < 10 ? "0" : "") + (time - (time/60)*60));
+                currentTime = time/MINUTES_IN_HOUR + ":" + (((time - (time/MINUTES_IN_HOUR)*MINUTES_IN_HOUR) < 10 ? "0" : "") + (time - (time/MINUTES_IN_HOUR)*MINUTES_IN_HOUR));
                 System.out.println(currentTime + " - " + "Курьер начал работу. Зашел в метро на станции " + currentStation);
                 counter++;
                 saveInfo(currentStation, currentTime);
                 continue;
             }
             if (time > STARTING_TIME){
-                currentTime = time/60 + ":" + (((time - (time/60)*60) < 10 ? "0" : "") + (time - (time/60)*60));
-                waitALittle(500);
+                currentTime = time/MINUTES_IN_HOUR + ":" + (((time - (time/MINUTES_IN_HOUR)*MINUTES_IN_HOUR) < 10 ? "0" : "") + (time - (time/MINUTES_IN_HOUR)*MINUTES_IN_HOUR));
+                waitALittle(PRINT_DELAY);
                 System.out.println(currentTime + " - " + "Курьер зашел в метро на станции " + currentStation);
                 counter++;
             }
             nextStation = nextStationRandom();
             int stationsTraveledCounter;
             if (nextStation[0] != previousStation[0]){
-                waitALittle(500);
+                waitALittle(PRINT_DELAY);
                 stationsTraveledCounter = changeLine();
             }
             else{
                 stationsTraveledCounter = Math.abs(nextStation[1] - previousStation[1]);
             }
             time += stationsTraveledCounter * TIME_BETWEEN_STATIONS;
-            currentTime = time/60 + ":" + (((time - (time/60)*60) < 10 ? "0" : "") + (time - (time/60)*60));
+            currentTime = time/ MINUTES_IN_HOUR + ":" + (((time - (time/MINUTES_IN_HOUR)*MINUTES_IN_HOUR) < 10 ? "0" : "") + (time - (time/MINUTES_IN_HOUR)*MINUTES_IN_HOUR));
             currentStation = METROPOLITAN[nextStation[0]][nextStation[1]];
-            waitALittle(500);
+            waitALittle(PRINT_DELAY);
             System.out.println(currentTime + " - " + "Курьер вышел на станции " + currentStation);
             int randomTimeOnStation = (int)(20 * Math.random() + 10);
             time += randomTimeOnStation;
             if (time >= STARTING_TIME + WORKING_DAY_DURATION){
-                currentTime = time/60 + ":" + (((time - (time/60)*60) < 10 ? "0" : "") + (time - (time/60)*60));
-                waitALittle(500);
+                currentTime = time/MINUTES_IN_HOUR + ":" + (((time - (time/MINUTES_IN_HOUR)*MINUTES_IN_HOUR) < 10 ? "0" : "") + (time - (time/MINUTES_IN_HOUR)*MINUTES_IN_HOUR));
+                waitALittle(PRINT_DELAY);
                 System.out.println(currentTime + " - " + "Курьер зашел в метро на станции " + currentStation + " и поехал домой.");
                 counter++;
             }
@@ -193,21 +197,21 @@ public class MainClass {
 
     private static void showFullInfo() {
         System.out.println("Красная ветка:");
-        for (int j = 0; j < METROPOLITAN[0].length; j++){
-            if (ridesInfo.containsKey(METROPOLITAN[0][j])){
-                System.out.println(METROPOLITAN[0][j] + " - посещений: " + ridesInfo.get(METROPOLITAN[0][j]).count + ", время: " + ridesInfo.get(METROPOLITAN[0][j]).time);
+        for (int j = 0; j < METROPOLITAN[RED].length; j++){
+            if (ridesInfo.containsKey(METROPOLITAN[RED][j])){
+                System.out.println(METROPOLITAN[RED][j] + " - посещений: " + ridesInfo.get(METROPOLITAN[RED][j]).count + ", время: " + ridesInfo.get(METROPOLITAN[RED][j]).time);
             }
         }
         System.out.println("Синяя ветка:");
-        for (int j = 0; j < METROPOLITAN[1].length; j++){
-            if (ridesInfo.containsKey(METROPOLITAN[1][j])){
-                System.out.println(METROPOLITAN[1][j] + " - посещений: " + ridesInfo.get(METROPOLITAN[1][j]).count + ", время: " + ridesInfo.get(METROPOLITAN[1][j]).time);
+        for (int j = 0; j < METROPOLITAN[BLUE].length; j++){
+            if (ridesInfo.containsKey(METROPOLITAN[BLUE][j])){
+                System.out.println(METROPOLITAN[BLUE][j] + " - посещений: " + ridesInfo.get(METROPOLITAN[BLUE][j]).count + ", время: " + ridesInfo.get(METROPOLITAN[BLUE][j]).time);
             }
         }
         System.out.println("Зеленая ветка:");
-        for (int j = 0; j < METROPOLITAN[2].length; j++){
-            if (ridesInfo.containsKey(METROPOLITAN[2][j])){
-                System.out.println(METROPOLITAN[2][j] + " - посещений: " + ridesInfo.get(METROPOLITAN[2][j]).count + ", время: " + ridesInfo.get(METROPOLITAN[2][j]).time);
+        for (int j = 0; j < METROPOLITAN[GREEN].length; j++){
+            if (ridesInfo.containsKey(METROPOLITAN[GREEN][j])){
+                System.out.println(METROPOLITAN[GREEN][j] + " - посещений: " + ridesInfo.get(METROPOLITAN[GREEN][j]).count + ", время: " + ridesInfo.get(METROPOLITAN[GREEN][j]).time);
             }
         }
         System.out.println("----------------------------------------------");
@@ -231,52 +235,55 @@ public class MainClass {
         int finishLine = nextStation[0];
         int startStation = previousStation[1];
         int finishStation = previousStation[1];
-        int stationsCounter = 0;
+        int stationsCounter;
         int timeChange;
-        if (startLine == 0 && finishLine == 1){
+        if (startLine == RED && finishLine == BLUE){
             timeChange = time + Math.abs(startStation - KRESCHATIK_INDEX) * TIME_BETWEEN_STATIONS;
-            String timeChangeString = timeChange/60 + ":" + (((timeChange - (timeChange/60)*60) < 10 ? "0" : "") + (timeChange - (timeChange/60)*60));
+            String timeChangeString = timeChange/MINUTES_IN_HOUR + ":" + (((timeChange - (timeChange/MINUTES_IN_HOUR)*MINUTES_IN_HOUR) < 10 ? "0" : "") + (timeChange - (timeChange/MINUTES_IN_HOUR)*MINUTES_IN_HOUR));
             System.out.println(timeChangeString + " - Курьер пересел со станции Хрещатик на станцию Майдан Незалежності");
             stationsCounter = Math.abs(startStation - KRESCHATIK_INDEX) + Math.abs(finishStation - MAIDAN_INDEX);
         }
-        else if (startLine == 0 && finishLine == 2){
+        else if (startLine == RED && finishLine == GREEN){
             timeChange = time + Math.abs(startStation - TEATRALNA_INDEX) * TIME_BETWEEN_STATIONS;
-            String timeChangeString = timeChange/60 + ":" + (((timeChange - (timeChange/60)*60) < 10 ? "0" : "") + (timeChange - (timeChange/60)*60));
+            String timeChangeString = timeChange/MINUTES_IN_HOUR + ":" + (((timeChange - (timeChange/MINUTES_IN_HOUR)*MINUTES_IN_HOUR) < 10 ? "0" : "") + (timeChange - (timeChange/MINUTES_IN_HOUR)*MINUTES_IN_HOUR));
             System.out.println(timeChangeString + " - Курьер пересел со станции Театральна на станцию Золоті Ворота");
             stationsCounter = Math.abs(startStation - TEATRALNA_INDEX) + Math.abs(finishStation - ZOLOTI_VOROTA_INDEX);
         }
-        else if (startLine == 1 && finishLine == 0){
+        else if (startLine == BLUE && finishLine == RED){
             timeChange = time + Math.abs(startStation - MAIDAN_INDEX) * TIME_BETWEEN_STATIONS;
-            String timeChangeString = timeChange/60 + ":" + (((timeChange - (timeChange/60)*60) < 10 ? "0" : "") + (timeChange - (timeChange/60)*60));
+            String timeChangeString = timeChange/MINUTES_IN_HOUR + ":" + (((timeChange - (timeChange/MINUTES_IN_HOUR)*MINUTES_IN_HOUR) < 10 ? "0" : "") + (timeChange - (timeChange/MINUTES_IN_HOUR)*MINUTES_IN_HOUR));
             System.out.println(timeChangeString + " - Курьер пересел со станции Майдан Незалежності на станцию Хрещатик");
             stationsCounter = Math.abs(startStation - MAIDAN_INDEX) + Math.abs(finishStation - KRESCHATIK_INDEX);
         }
-        else if (startLine == 1 && finishLine == 2){
+        else if (startLine == BLUE && finishLine == GREEN){
             timeChange = time + Math.abs(startStation - LVA_TOLSTOGO_INDEX) * TIME_BETWEEN_STATIONS;
-            String timeChangeString = timeChange/60 + ":" + (((timeChange - (timeChange/60)*60) < 10 ? "0" : "") + (timeChange - (timeChange/60)*60));
+            String timeChangeString = timeChange/MINUTES_IN_HOUR + ":" + (((timeChange - (timeChange/MINUTES_IN_HOUR)*MINUTES_IN_HOUR) < 10 ? "0" : "") + (timeChange - (timeChange/MINUTES_IN_HOUR)*MINUTES_IN_HOUR));
             System.out.println(timeChangeString + " - Курьер пересел со станции Площа Льва Толстого на станцию Палац Спорту");
             stationsCounter = Math.abs(startStation - LVA_TOLSTOGO_INDEX) + Math.abs(finishStation - PALATS_SPORTU_INDEX);
         }
-        else if (startLine == 2 && finishLine == 0){
+        else if (startLine == GREEN && finishLine == RED){
             timeChange = time + Math.abs(startStation - ZOLOTI_VOROTA_INDEX) * TIME_BETWEEN_STATIONS;
-            String timeChangeString = timeChange/60 + ":" + (((timeChange - (timeChange/60)*60) < 10 ? "0" : "") + (timeChange - (timeChange/60)*60));
+            String timeChangeString = timeChange/MINUTES_IN_HOUR + ":" + (((timeChange - (timeChange/MINUTES_IN_HOUR)*MINUTES_IN_HOUR) < 10 ? "0" : "") + (timeChange - (timeChange/MINUTES_IN_HOUR)*MINUTES_IN_HOUR));
             System.out.println(timeChangeString + " - Курьер пересел со станции Золоті Ворота на станцию Театральна");
             stationsCounter = Math.abs(startStation - ZOLOTI_VOROTA_INDEX) + Math.abs(finishStation - TEATRALNA_INDEX);
         }
-        else if (startLine == 2 && finishLine == 1){
+        else if (startLine == GREEN && finishLine == BLUE){
             timeChange = time + Math.abs(startStation - PALATS_SPORTU_INDEX) * TIME_BETWEEN_STATIONS;
-            String timeChangeString = timeChange/60 + ":" + (((timeChange - (timeChange/60)*60) < 10 ? "0" : "") + (timeChange - (timeChange/60)*60));
+            String timeChangeString = timeChange/MINUTES_IN_HOUR + ":" + (((timeChange - (timeChange/MINUTES_IN_HOUR)*MINUTES_IN_HOUR) < 10 ? "0" : "") + (timeChange - (timeChange/MINUTES_IN_HOUR)*MINUTES_IN_HOUR));
             System.out.println(timeChangeString + " - Курьер пересел со станции Палац Спорту на станцию Площа Льва Толстого");
             stationsCounter = Math.abs(startStation - PALATS_SPORTU_INDEX) + Math.abs(finishStation - LVA_TOLSTOGO_INDEX);
+        }
+        else{
+            stationsCounter = 0;
         }
         return stationsCounter;
     }
 
     private static int[] nextStationRandom() {
-        int[] output = new int[2];
+        int[] output = new int[METROPOLITAN.length - 1];
         while (true) {
-            output[0] = (int) (3 * Math.random());
-            output[1] = (int) (18 * Math.random());
+            output[0] = (int) (METROPOLITAN.length * Math.random());
+            output[1] = (int) (METROPOLITAN[0].length * Math.random());
             if (output[0] == previousStation[0] && output[1] == previousStation[1])
                 System.out.print("");
             else
