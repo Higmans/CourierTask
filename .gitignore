@@ -16,6 +16,7 @@ local.properties
 .settings/
 .loadpath
 .idea
+.idea\workspace.xml
 *.iml
 
 # External tool builders
