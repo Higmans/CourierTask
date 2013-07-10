@@ -1,4 +1,4 @@
-public class RideInfo {
+class RideInfo {
     public int count = 0;
     public String time;
 

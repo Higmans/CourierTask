@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class MainClass {
-    public static final String[] STATION_NAMES_RED = {"Лісова", //0
+    private static final String[] STATION_NAMES_RED = {"Лісова", //0
                                             "Чернігівська",
                                             "Дарниця",
                                             "Лівобережна",
@@ -19,7 +19,7 @@ public class MainClass {
                                             "Святошин", // 15 112
                                             "Житомирська",// 16
                                             "Академмістечко"}; //17 110
-    public static final String[] STATION_NAMES_BLUE = {"Теремки",
+    private static final String[] STATION_NAMES_BLUE = {"Теремки",
                                             "Іподром",
                                             "Виставковий центр",
                                             "Васильківська",
@@ -37,7 +37,7 @@ public class MainClass {
                                             "Оболонь",
                                             "Мінська",
                                             "Героїв Дніпра"};
-    public static final String[] STATION_NAMES_GREEN = {"Червоний Хутір",
+    private static final String[] STATION_NAMES_GREEN = {"Червоний Хутір",
                                             "Бориспільска",
                                             "Вирлиця",
                                             "Харківська",
@@ -55,35 +55,34 @@ public class MainClass {
                                             "Лук'янівська",
                                             "Дорогожичі",
                                             "Сирець"};
-    public static final int MINUTES_IN_HOUR = 60;
-    public static final int RIDE_COST = 2; // жетон - 2 грн
-    public static final int STARTING_TIME = 9 * MINUTES_IN_HOUR; // начало работы - 9 часов утра
-    public static final int WORKING_DAY_DURATION = 8 * MINUTES_IN_HOUR; // 8 часов рабочий день
-    public static final int TIME_BETWEEN_STATIONS = 2; // время между станциями в минутах
-    public static final int KRESCHATIK_INDEX = 7;
-    public static final int MAIDAN_INDEX = 10;
-    public static final int TEATRALNA_INDEX = 8;
-    public static final int ZOLOTI_VOROTA_INDEX = 13;
-    public static final int LVA_TOLSTOGO_INDEX = 9;
-    public static final int PALATS_SPORTU_INDEX = 12;
-    public static final String[][] METROPOLITAN = {STATION_NAMES_RED, STATION_NAMES_BLUE, STATION_NAMES_GREEN};
-    public static final String STARTING_STATION = METROPOLITAN[0][0]; // начальная станция - Лысова
-    public static final int SHOW_FULL_INFO = 1;
-    public static final int SHOW_EXPENSES = 2;
-    public static final int SHOW_STATION_INFO = 3;
-    public static final int EXIT = 4;
-    public static final int PRINT_DELAY = 500; // задержка вывода в консоль при генерации дня
+    private static final int MINUTES_IN_HOUR = 60;
+    private static final int RIDE_COST = 2; // жетон - 2 грн
+    private static final int STARTING_TIME = 9 * MINUTES_IN_HOUR; // начало работы - 9 часов утра
+    private static final int WORKING_DAY_DURATION = 8 * MINUTES_IN_HOUR; // 8 часов рабочий день
+    private static final int TIME_BETWEEN_STATIONS = 2; // время между станциями в минутах
+    private static final int KRESCHATIK_INDEX = 7;
+    private static final int MAIDAN_INDEX = 10;
+    private static final int TEATRALNA_INDEX = 8;
+    private static final int ZOLOTI_VOROTA_INDEX = 13;
+    private static final int LVA_TOLSTOGO_INDEX = 9;
+    private static final int PALATS_SPORTU_INDEX = 12;
+    private static final String[][] METROPOLITAN = {STATION_NAMES_RED, STATION_NAMES_BLUE, STATION_NAMES_GREEN};
+    private static final String STARTING_STATION = METROPOLITAN[0][0]; // начальная станция - Лысова
+    private static final int SHOW_FULL_INFO = 1;
+    private static final int SHOW_EXPENSES = 2;
+    private static final int SHOW_STATION_INFO = 3;
+    private static final int EXIT = 4;
+    private static final int PRINT_DELAY = 5; // задержка вывода в консоль при генерации дня
     private static final int RED = 0;
     private static final int BLUE = 1;
     private static final int GREEN = 2;
-    public static int time = STARTING_TIME;
-    public static String currentStation = STARTING_STATION;
-    public static int counter = 0;
-    public static int[] previousStation = {0,0};
-    public static int[] nextStation;
-    public static String currentTime;
-    public static HashMap<String, RideInfo> ridesInfo = new HashMap<String, RideInfo>();
-    static Scanner sc = new Scanner(System.in);
+    private static int time = STARTING_TIME;
+    private static String currentStation = STARTING_STATION;
+    private static int counter = 0;
+    private static int[] previousStation = {0,0};
+    private static int[] nextStation;
+    public static final HashMap<String, RideInfo> ridesInfo = new HashMap<String, RideInfo>();
+    private static final Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
         boolean running = true;
@@ -145,8 +144,8 @@ public class MainClass {
         System.out.println("4. Выйти из программы");
         int input;
         try {
-            input = sc.nextInt();
-        } catch (Exception e) {
+            input = new Scanner(System.in).nextInt();
+        } catch (InputMismatchException e) {
             System.out.println("Ошибка! Введите только номер пункта меню!");
             input = -1;
         }
@@ -155,6 +154,7 @@ public class MainClass {
 
     private static void generateRides() {
         while (time < STARTING_TIME + WORKING_DAY_DURATION){
+            String currentTime;
             if (counter == 0){
                 currentTime = time/MINUTES_IN_HOUR + ":" + (((time - (time/MINUTES_IN_HOUR)*MINUTES_IN_HOUR) < 10 ? "0" : "") + (time - (time/MINUTES_IN_HOUR)*MINUTES_IN_HOUR));
                 System.out.println(currentTime + " - " + "Курьер начал работу. Зашел в метро на станции " + currentStation);
@@ -164,14 +164,14 @@ public class MainClass {
             }
             if (time > STARTING_TIME){
                 currentTime = time/MINUTES_IN_HOUR + ":" + (((time - (time/MINUTES_IN_HOUR)*MINUTES_IN_HOUR) < 10 ? "0" : "") + (time - (time/MINUTES_IN_HOUR)*MINUTES_IN_HOUR));
-                waitALittle(PRINT_DELAY);
+                waitALittle();
                 System.out.println(currentTime + " - " + "Курьер зашел в метро на станции " + currentStation);
                 counter++;
             }
             nextStation = nextStationRandom();
             int stationsTraveledCounter;
             if (nextStation[0] != previousStation[0]){
-                waitALittle(PRINT_DELAY);
+                waitALittle();
                 stationsTraveledCounter = changeLine();
             }
             else{
@@ -180,13 +180,13 @@ public class MainClass {
             time += stationsTraveledCounter * TIME_BETWEEN_STATIONS;
             currentTime = time/ MINUTES_IN_HOUR + ":" + (((time - (time/MINUTES_IN_HOUR)*MINUTES_IN_HOUR) < 10 ? "0" : "") + (time - (time/MINUTES_IN_HOUR)*MINUTES_IN_HOUR));
             currentStation = METROPOLITAN[nextStation[0]][nextStation[1]];
-            waitALittle(PRINT_DELAY);
+            waitALittle();
             System.out.println(currentTime + " - " + "Курьер вышел на станции " + currentStation);
             int randomTimeOnStation = (int)(20 * Math.random() + 10);
             time += randomTimeOnStation;
             if (time >= STARTING_TIME + WORKING_DAY_DURATION){
                 currentTime = time/MINUTES_IN_HOUR + ":" + (((time - (time/MINUTES_IN_HOUR)*MINUTES_IN_HOUR) < 10 ? "0" : "") + (time - (time/MINUTES_IN_HOUR)*MINUTES_IN_HOUR));
-                waitALittle(PRINT_DELAY);
+                waitALittle();
                 System.out.println(currentTime + " - " + "Курьер зашел в метро на станции " + currentStation + " и поехал домой.");
                 counter++;
             }
@@ -222,9 +222,9 @@ public class MainClass {
         ridesInfo.put(currentStation, new RideInfo(currentStation, currentTime));
     }
 
-    private static void waitALittle(long time) {
+    private static void waitALittle() {
         try {
-            Thread.sleep(time);
+            Thread.sleep((long) MainClass.PRINT_DELAY);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
