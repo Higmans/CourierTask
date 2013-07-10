@@ -72,7 +72,7 @@ public class MainClass {
     private static final int SHOW_EXPENSES = 2;
     private static final int SHOW_STATION_INFO = 3;
     private static final int EXIT = 4;
-    private static final int PRINT_DELAY = 5; // задержка вывода в консоль при генерации дня
+    private static final int PRINT_DELAY = 500; // задержка вывода в консоль при генерации дня
     private static final int RED = 0;
     private static final int BLUE = 1;
     private static final int GREEN = 2;
